@@ -5,12 +5,12 @@ import java.util.Optional;
 import java.util.UUID;
 import Entities.Event;
 
-public interface EventRepository {
-    Optional<Event> findById(UUID eventId);
+public interface Repository<T, ID> {
+    Optional<T> findById(ID id);
 
-    List<Event> findAll();
+    List<T> findAll();
 
-    void save(Event event);
+    void save(T entity);
 
-    void update(Event event);
+    void update(T entity);
 }

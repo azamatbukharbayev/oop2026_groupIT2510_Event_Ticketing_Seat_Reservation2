@@ -5,12 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 import Entities.Seat;
 
-public interface SeatRepository {
-    Optional<Seat> findById(UUID seatId);
+public interface SeatRepository extends Repository<Seat, UUID> {
 
     List<Seat> findByEventId(UUID eventId);
-
-    void save(Seat seat);
-
-    void update(Seat seat);
 }
