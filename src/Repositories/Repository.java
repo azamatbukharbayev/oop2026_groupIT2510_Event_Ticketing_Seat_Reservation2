@@ -6,7 +6,7 @@ import java.util.UUID;
 import Entities.Event;
 
 public interface Repository<T, ID> {
-    Optional<T> findById(UUID ID);
+    Optional<T> findById(ID id);
 
     List<T> findAll();
 

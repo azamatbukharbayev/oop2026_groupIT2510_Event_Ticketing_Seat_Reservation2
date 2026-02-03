@@ -1,5 +1,6 @@
 package edu.aitu.oop3.db;
 
+import edu.aitu.oop3.db.DatabaseConnection;
 import Entities.Ticket;
 import Repositories.TicketRepository;
 

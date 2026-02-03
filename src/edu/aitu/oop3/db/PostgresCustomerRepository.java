@@ -1,13 +1,15 @@
 package edu.aitu.oop3.db;
 
+import edu.aitu.oop3.db.DatabaseConnection;
 import Entities.Customer;
-import Repositories.CustomerRepository;
+import Repositories.Repository;
 
 import java.sql.*;
 import java.time.OffsetDateTime;
 import java.util.*;
 
-public class PostgresCustomerRepository implements CustomerRepository {
+public class PostgresCustomerRepository
+        implements Repository<Customer, UUID> {
     private final Connection connection;
 
     public PostgresCustomerRepository(Connection connection) {

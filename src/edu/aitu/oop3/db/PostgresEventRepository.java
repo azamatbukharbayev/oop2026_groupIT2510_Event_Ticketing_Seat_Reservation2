@@ -3,13 +3,14 @@ package edu.aitu.oop3.db;
 import edu.aitu.oop3.db.DatabaseConnection;
 import Entities.Event;
 import Entities.EventStatus;
-import Repositories.EventRepository;
+import Repositories.Repository;
 
 import java.sql.*;
 import java.time.OffsetDateTime;
 import java.util.*;
 
-public class PostgresEventRepository implements Repository<Event, eventId> {
+public class PostgresEventRepository
+        implements Repository<Event, UUID> {
     private final Connection connection;
 
     public PostgresEventRepository(Connection connection) {

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface TicketRepository extends Repository<Ticket, ticketId> {
+public interface TicketRepository extends Repository<Ticket, ID> {
 
     List<Ticket> findByCustomerId(UUID customerId);
 
