@@ -9,7 +9,7 @@ import java.sql.*;
 import java.time.OffsetDateTime;
 import java.util.*;
 
-public class PostgresEventRepository implements Repository<Event, UUID> {
+public class PostgresEventRepository implements Repository<Event, eventId> {
     private final Connection connection;
 
     public PostgresEventRepository(Connection connection) {
