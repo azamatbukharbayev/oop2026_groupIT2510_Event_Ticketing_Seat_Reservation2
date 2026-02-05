@@ -12,10 +12,21 @@ public class DatabaseConnection {
     private static final String PASSWORD = System.getenv("DB_PASSWORD");
 
     private DatabaseConnection() {
-        //no instances
+        try {
+            this.connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to create database connection", e);
+        }
     }
 
-    public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASSWORD);
+    public static synchronized DatabaseConnection getInstance() {
+        if (instance == null) {
+            instance = new DatabaseConnection();
+        }
+        return instance;
+    }
+
+    public static Connection getConnection() {
+        return connection;
     }
 }
