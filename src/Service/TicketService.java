@@ -20,9 +20,9 @@ public class TicketService {
     private final Repository<Customer, UUID> customerRepository;
     private final TicketRepository ticketRepository;
 
-    public TicketService(EventRepository eventRepository,
+    public TicketService(Repository<Event, UUID> eventRepository,
             SeatRepository seatRepository,
-            CustomerRepository customerRepository,
+            Repository<Customer, UUID>  customerRepository,
             TicketRepository ticketRepository) {
         this.eventRepository = eventRepository;
         this.seatRepository = seatRepository;

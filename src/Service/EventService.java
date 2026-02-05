@@ -14,7 +14,12 @@ public class EventService {
     }
 
     public void createEvent(UUID eventId, String name, OffsetDateTime startsAt, EventStatus status) {
-        Event event = new Event(eventId, name, startsAt, status);
+        Event event = Event.builder()
+                .eventId(eventId)
+                .name(name)
+                .startsAt(startsAt)
+                .status(status)
+                .build();
         eventRepository.save(event);
         System.out.println("Event created: " + name + " (" + eventId + ")");
     }
