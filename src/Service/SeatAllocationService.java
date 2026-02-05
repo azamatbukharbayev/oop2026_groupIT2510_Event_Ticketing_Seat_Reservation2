@@ -36,12 +36,10 @@ public class SeatAllocationService {
         System.out.println("Seating Layout for Event(" + eventId + "):");
 
         seats.stream()
-                .sorted((s1, s2) -> {
-                    int rowCmp = s1.getRow().compareTo(s2.getRow());
-                    if (rowCmp != 0)
-                        return rowCmp;
-                    return Integer.compare(s1.getNumber(), s2.getNumber());
-                })
+                .filter(isAvailable.or(seat -> seat.isBooked()))
+                .sorted(Comparator
+                        .comparing(Seat::getRow)
+                        .thenComparingInt(Seat::getNumber))
                 .forEach(seat -> {
                     String status = seat.isBooked() ? "[X]" : "[O]";
                     System.out.println(seat.getRow() + seat.getNumber() + " " + status);

@@ -2,14 +2,14 @@ package Service;
 
 import Entities.Event;
 import Entities.EventStatus;
-import Repositories.EventRepository;
+import Repositories.Repository;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
 public class EventService {
-    private final EventRepository eventRepository;
+    private final Repository<Event, UUID> eventRepository;
 
-    public EventService(EventRepository eventRepository) {
+    public EventService(Repository<Event, UUID> eventRepository) {
         this.eventRepository = eventRepository;
     }
 

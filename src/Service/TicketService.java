@@ -7,8 +7,7 @@ import Entities.Seat;
 import Entities.Ticket;
 import Exceptions.EventCancelled;
 import Exceptions.SeatAlreadyBooked;
-import Repositories.CustomerRepository;
-import Repositories.EventRepository;
+import Repositories.Repository;
 import Repositories.SeatRepository;
 import Repositories.TicketRepository;
 import java.time.OffsetDateTime;
@@ -16,9 +15,9 @@ import java.util.UUID;
 
 public class TicketService {
 
-    private final EventRepository eventRepository;
+    private final Repository<Event, UUID> eventRepository;
     private final SeatRepository seatRepository;
-    private final CustomerRepository customerRepository;
+    private final Repository<Customer, UUID> customerRepository;
     private final TicketRepository ticketRepository;
 
     public TicketService(EventRepository eventRepository,

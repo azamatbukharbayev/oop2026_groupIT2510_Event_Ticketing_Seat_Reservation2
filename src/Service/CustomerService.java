@@ -1,13 +1,13 @@
 package Service;
 
 import Entities.Customer;
-import Repositories.CustomerRepository;
+import Repositories.Repository;
 import java.util.UUID;
 
 public class CustomerService {
-    private final CustomerRepository customerRepository;
+    private final Repository<Customer, UUID> customerRepository;
 
-    public CustomerService(CustomerRepository customerRepository) {
+    public CustomerService(Repository<Customer, UUID> customerRepository) {
         this.customerRepository = customerRepository;
     }
 
