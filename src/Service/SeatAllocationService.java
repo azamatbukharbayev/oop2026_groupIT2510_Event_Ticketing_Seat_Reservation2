@@ -26,16 +26,6 @@ public class SeatAllocationService {
         System.out.println("Seat booked: " + seatId);
     }
 
-    public List<Seat> searchSeats(UUID eventId, Predicate<Seat> filter) {
-        return seatRepository.findByEventId(eventId)
-                .stream()
-                .filter(filter)
-                .sorted(Comparator
-                        .comparing(Seat::getRow)
-                        .thenComparingInt(Seat::getNumber))
-                .collect(Collectors.toList());
-    }
-
     public void viewSeatingLayout(UUID eventId) {
         List<Seat> seats = seatRepository.findByEventId(eventId);
         if (seats.isEmpty()) {

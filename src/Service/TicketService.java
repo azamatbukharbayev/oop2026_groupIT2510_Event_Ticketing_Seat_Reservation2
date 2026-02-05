@@ -51,7 +51,8 @@ public class TicketService {
         seat.setBooked(true);
         seatRepository.update(seat);
 
-        Ticket ticket = new Ticket(
+        Ticket ticket = Ticket.create(
+                TicketType.STANDARD,
                 UUID.randomUUID(),
                 eventId,
                 seatId,

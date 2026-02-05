@@ -45,4 +45,48 @@ public class Ticket {
     public OffsetDateTime getPurchasedAt() {
         return purchasedAt;
     }
+
+    public static Ticket create(
+            TicketType type,
+            UUID ticketId,
+            UUID eventId,
+            UUID seatId,
+            UUID customerId,
+            String code,
+            OffsetDateTime purchaseTime) {
+
+        return switch (type) {
+            case VIP -> new VIPTicket(ticketId, eventId, seatId, customerId, code, purchaseTime);
+            case STUDENT -> new StudentTicket(ticketId, eventId, seatId, customerId, code, purchaseTime);
+            default -> new StandardTicket(ticketId, eventId, seatId, customerId, code, purchaseTime);
+        };
+    }
+}
+
+public static class StandardTicket extends Ticket {
+    public StandardTicket(UUID ticketId, UUID eventId, UUID seatId,
+                          UUID customerId, String code, OffsetDateTime purchaseTime) {
+        super(ticketId, eventId, seatId, customerId, code, purchaseTime);
+    }
+}
+
+public static class VIPTicket extends Ticket {
+    public VIPTicket(UUID ticketId, UUID eventId, UUID seatId,
+                     UUID customerId, String code, OffsetDateTime purchaseTime) {
+        super(ticketId, eventId, seatId, customerId, code, purchaseTime);
+    }
+}
+
+public static class StudentTicket extends Ticket {
+    public StudentTicket(UUID ticketId, UUID eventId, UUID seatId,
+                         UUID customerId, String code, OffsetDateTime purchaseTime) {
+        super(ticketId, eventId, seatId, customerId, code, purchaseTime);
+    }
+}
+
+
+public enum TicketType {
+    STANDARD,
+    VIP,
+    STUDENT
 }
