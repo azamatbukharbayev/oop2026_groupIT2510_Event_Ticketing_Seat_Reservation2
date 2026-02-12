@@ -37,7 +37,6 @@ public class TicketSalesComponent {
             throw new EventCancelled(eventId);
         }
 
-        // Delegate seat reservation to SeatManager (Architectural Rule)
         seatManager.reserveSeat(seatId);
 
         Customer customer = customerRepository.findById(customerId)
