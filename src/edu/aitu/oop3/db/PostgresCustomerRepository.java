@@ -1,11 +1,9 @@
 package edu.aitu.oop3.db;
 
-import edu.aitu.oop3.db.DatabaseConnection;
 import Entities.Customer;
 import Repositories.Repository;
 
 import java.sql.*;
-import java.time.OffsetDateTime;
 import java.util.*;
 
 public class PostgresCustomerRepository
@@ -24,7 +22,8 @@ public class PostgresCustomerRepository
             ps.setObject(1, customerId);
 
             ResultSet rs = ps.executeQuery();
-            if (!rs.next()) return Optional.empty();
+            if (!rs.next())
+                return Optional.empty();
 
             return Optional.of(mapRow(rs));
         } catch (SQLException e) {
@@ -53,9 +52,9 @@ public class PostgresCustomerRepository
     @Override
     public void save(Customer customer) {
         String sql = """
-            INSERT INTO customers (customer_id, first_name, last_name, email)
-            VALUES (?, ?, ?, ?)
-        """;
+                    INSERT INTO customers (customer_id, first_name, last_name, email)
+                    VALUES (?, ?, ?, ?)
+                """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setObject(1, customer.getCustomerId());
@@ -71,9 +70,9 @@ public class PostgresCustomerRepository
     @Override
     public void update(Customer customer) {
         String sql = """
-            UPDATE customers SET first_name = ?, last_name = ?, email = ?
-            WHERE customer_id = ?
-        """;
+                    UPDATE customers SET first_name = ?, last_name = ?, email = ?
+                    WHERE customer_id = ?
+                """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, customer.getFirstName());
@@ -91,8 +90,6 @@ public class PostgresCustomerRepository
                 UUID.fromString(rs.getString("customer_id")),
                 rs.getString("first_name"),
                 rs.getString("last_name"),
-                rs.getString("email"),
-                rs.getObject("created_at", OffsetDateTime.class)
-        );
+                rs.getString("email"));
     }
 }

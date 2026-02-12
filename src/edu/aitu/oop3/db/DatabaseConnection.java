@@ -11,6 +11,9 @@ public class DatabaseConnection {
     private static final String USER = "postgres.vuvepkcvnbvlxhuqxbjw";
     private static final String PASSWORD = System.getenv("DB_PASSWORD");
 
+    private static DatabaseConnection instance;
+    private Connection connection;
+
     private DatabaseConnection() {
         try {
             this.connection = DriverManager.getConnection(URL, USER, PASSWORD);

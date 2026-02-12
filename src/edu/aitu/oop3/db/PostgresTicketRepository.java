@@ -16,6 +16,34 @@ public class PostgresTicketRepository implements TicketRepository {
     }
 
     @Override
+    public List<Ticket> findAll() {
+        String sql = "SELECT * FROM tickets";
+        List<Ticket> tickets = new ArrayList<>();
+
+        try (PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                tickets.add(mapRow(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return tickets;
+    }
+
+    @Override
+    public void update(Ticket entity) {
+        // No-op
+    }
+
+    @Override
+    public List<Ticket> findBySeatId(UUID seatId) {
+        return new ArrayList<>();
+    }
+
+    @Override
     public Optional<Ticket> findById(UUID ticketId) {
         String sql = "SELECT * FROM tickets WHERE ticket_id = ?";
 
@@ -23,7 +51,8 @@ public class PostgresTicketRepository implements TicketRepository {
             ps.setObject(1, ticketId);
 
             ResultSet rs = ps.executeQuery();
-            if (!rs.next()) return Optional.empty();
+            if (!rs.next())
+                return Optional.empty();
 
             return Optional.of(mapRow(rs));
         } catch (SQLException e) {
@@ -31,7 +60,6 @@ public class PostgresTicketRepository implements TicketRepository {
         }
     }
 
-    @Override
     public Optional<Ticket> findByCode(String code) {
         String sql = "SELECT * FROM tickets WHERE code = ?";
 
@@ -39,7 +67,8 @@ public class PostgresTicketRepository implements TicketRepository {
             ps.setString(1, code);
 
             ResultSet rs = ps.executeQuery();
-            if (!rs.next()) return Optional.empty();
+            if (!rs.next())
+                return Optional.empty();
 
             return Optional.of(mapRow(rs));
         } catch (SQLException e) {
@@ -88,9 +117,9 @@ public class PostgresTicketRepository implements TicketRepository {
     @Override
     public void save(Ticket ticket) {
         String sql = """
-            INSERT INTO tickets (ticket_id, event_id, seat_id, customer_id, code)
-            VALUES (?, ?, ?, ?, ?)
-        """;
+                    INSERT INTO tickets (ticket_id, event_id, seat_id, customer_id, code)
+                    VALUES (?, ?, ?, ?, ?)
+                """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setObject(1, ticket.getTicketId());
@@ -111,7 +140,6 @@ public class PostgresTicketRepository implements TicketRepository {
                 UUID.fromString(rs.getString("seat_id")),
                 UUID.fromString(rs.getString("customer_id")),
                 rs.getString("code"),
-                rs.getObject("purchased_at", OffsetDateTime.class)
-        );
+                rs.getObject("purchased_at", OffsetDateTime.class));
     }
 }

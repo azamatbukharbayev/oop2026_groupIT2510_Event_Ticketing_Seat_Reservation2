@@ -11,4 +11,6 @@ public interface TicketRepository extends Repository<Ticket, UUID> {
     List<Ticket> findByCustomerId(UUID customerId);
 
     List<Ticket> findBySeatId(UUID seatId);
+
+    List<Ticket> findByEventId(UUID eventId);
 }

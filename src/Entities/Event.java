@@ -82,11 +82,7 @@ public class Event {
             if (status == null)
                 status = EventStatus.SCHEDULED;
 
-            Event event = new Event();
-            event.eventId = this.eventId;
-            event.name = this.name;
-            event.startsAt = this.startsAt;
-            event.status = this.status;
+            Event event = new Event(this.eventId, this.name, this.startsAt, this.status);
 
             return event;
         }

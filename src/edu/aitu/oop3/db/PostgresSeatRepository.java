@@ -1,4 +1,4 @@
-package edu.aitu.oop3.db;
+packapackage edu.aitu.oop3.db;
 
 import edu.aitu.oop3.db.DatabaseConnection;
 import Entities.Seat;
@@ -16,6 +16,24 @@ public class PostgresSeatRepository implements SeatRepository {
     }
 
     @Override
+    public List<Seat> findAll() {
+        String sql = "SELECT * FROM seats";
+        List<Seat> seats = new ArrayList<>();
+
+        try (PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                seats.add(mapRow(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return seats;
+    }
+
+    @Override
     public Optional<Seat> findById(UUID seatId) {
         String sql = "SELECT * FROM seats WHERE seat_id = ?";
 
@@ -23,7 +41,8 @@ public class PostgresSeatRepository implements SeatRepository {
             ps.setObject(1, seatId);
 
             ResultSet rs = ps.executeQuery();
-            if (!rs.next()) return Optional.empty();
+            if (!rs.next())
+                return Optional.empty();
 
             return Optional.of(mapRow(rs));
         } catch (SQLException e) {
@@ -53,9 +72,9 @@ public class PostgresSeatRepository implements SeatRepository {
     @Override
     public void save(Seat seat) {
         String sql = """
-            INSERT INTO seats (seat_id, event_id, row, number, is_booked)
-            VALUES (?, ?, ?, ?, ?)
-        """;
+                    INSERT INTO seats (seat_id, event_id, row, number, is_booked)
+                    VALUES (?, ?, ?, ?, ?)
+                """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setObject(1, seat.getSeatId());
@@ -88,7 +107,6 @@ public class PostgresSeatRepository implements SeatRepository {
                 UUID.fromString(rs.getString("event_id")),
                 rs.getString("row"),
                 rs.getInt("number"),
-                rs.getBoolean("is_booked")
-        );
+                rs.getBoolean("is_booked"));
     }
 }

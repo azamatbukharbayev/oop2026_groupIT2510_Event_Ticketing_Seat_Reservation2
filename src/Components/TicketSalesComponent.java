@@ -1,34 +1,32 @@
-package Service;
+package Components;
 
 import Entities.Customer;
 import Entities.Event;
 import Entities.EventStatus;
-import Entities.Seat;
 import Entities.Ticket;
 import Entities.TicketType;
 import Exceptions.EventCancelled;
-import Exceptions.SeatAlreadyBooked;
 import Repositories.Repository;
-import Repositories.SeatRepository;
 import Repositories.TicketRepository;
+import Service.SeatManager;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-public class TicketService {
+public class TicketSalesComponent {
 
-    private final Repository<Event, UUID> eventRepository;
-    private final SeatRepository seatRepository;
-    private final Repository<Customer, UUID> customerRepository;
+    private final SeatManager seatManager;
     private final TicketRepository ticketRepository;
+    private final Repository<Event, UUID> eventRepository;
+    private final Repository<Customer, UUID> customerRepository;
 
-    public TicketService(Repository<Event, UUID> eventRepository,
-                         SeatRepository seatRepository,
-                         Repository<Customer, UUID> customerRepository,
-                         TicketRepository ticketRepository) {
-        this.eventRepository = eventRepository;
-        this.seatRepository = seatRepository;
-        this.customerRepository = customerRepository;
+    public TicketSalesComponent(SeatManager seatManager,
+                                TicketRepository ticketRepository,
+                                Repository<Event, UUID> eventRepository,
+                                Repository<Customer, UUID> customerRepository) {
+        this.seatManager = seatManager;
         this.ticketRepository = ticketRepository;
+        this.eventRepository = eventRepository;
+        this.customerRepository = customerRepository;
     }
 
     public void buyTicket(UUID eventId, UUID seatId, UUID customerId) {
@@ -39,18 +37,11 @@ public class TicketService {
             throw new EventCancelled(eventId);
         }
 
-        Seat seat = seatRepository.findById(seatId)
-                .orElseThrow(() -> new RuntimeException("Seat not found"));
-
-        if (seat.isBooked()) {
-            throw new SeatAlreadyBooked(seatId);
-        }
+        // Delegate seat reservation to SeatManager (Architectural Rule)
+        seatManager.reserveSeat(seatId);
 
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
-
-        seat.setBooked(true);
-        seatRepository.update(seat);
 
         Ticket ticket = Ticket.create(
                 TicketType.STANDARD,
@@ -58,7 +49,7 @@ public class TicketService {
                 eventId,
                 seatId,
                 customerId,
-                UUID.randomUUID().toString(),
+                UUID.randomUUID().toString().substring(0, 18),
                 OffsetDateTime.now());
 
         ticketRepository.save(ticket);

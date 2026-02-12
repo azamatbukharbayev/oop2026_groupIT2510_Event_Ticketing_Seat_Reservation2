@@ -3,16 +3,20 @@ package Service;
 import Entities.Seat;
 import Exceptions.SeatAlreadyBooked;
 import Repositories.SeatRepository;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
-public class SeatAllocationService {
+public class SeatAllocationService implements SeatManager {
     private final SeatRepository seatRepository;
 
     public SeatAllocationService(SeatRepository seatRepository) {
         this.seatRepository = seatRepository;
     }
 
+    @Override
     public void reserveSeat(UUID seatId) {
         Seat seat = seatRepository.findById(seatId)
                 .orElseThrow(() -> new RuntimeException("Seat not found: " + seatId));
@@ -24,6 +28,14 @@ public class SeatAllocationService {
         seat.setBooked(true);
         seatRepository.update(seat);
         System.out.println("Seat booked: " + seatId);
+    }
+
+    @Override
+    public List<Seat> getAvailableSeats(UUID eventId) {
+        return seatRepository.findByEventId(eventId)
+                .stream()
+                .filter(seat -> !seat.isBooked())
+                .collect(Collectors.toList());
     }
 
     public List<Seat> searchSeats(UUID eventId, Predicate<Seat> filter) {
@@ -46,7 +58,6 @@ public class SeatAllocationService {
         System.out.println("Seating Layout for Event(" + eventId + "):");
 
         seats.stream()
-                .filter(isAvailable.or(seat -> seat.isBooked()))
                 .sorted(Comparator
                         .comparing(Seat::getRow)
                         .thenComparingInt(Seat::getNumber))

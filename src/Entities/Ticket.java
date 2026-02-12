@@ -61,32 +61,25 @@ public class Ticket {
             default -> new StandardTicket(ticketId, eventId, seatId, customerId, code, purchaseTime);
         };
     }
-}
 
-public static class StandardTicket extends Ticket {
-    public StandardTicket(UUID ticketId, UUID eventId, UUID seatId,
-                          UUID customerId, String code, OffsetDateTime purchaseTime) {
-        super(ticketId, eventId, seatId, customerId, code, purchaseTime);
+    public static class StandardTicket extends Ticket {
+        public StandardTicket(UUID ticketId, UUID eventId, UUID seatId,
+                              UUID customerId, String code, OffsetDateTime purchaseTime) {
+            super(ticketId, eventId, seatId, customerId, code, purchaseTime);
+        }
     }
-}
 
-public static class VIPTicket extends Ticket {
-    public VIPTicket(UUID ticketId, UUID eventId, UUID seatId,
-                     UUID customerId, String code, OffsetDateTime purchaseTime) {
-        super(ticketId, eventId, seatId, customerId, code, purchaseTime);
-    }
-}
-
-public static class StudentTicket extends Ticket {
-    public StudentTicket(UUID ticketId, UUID eventId, UUID seatId,
+    public static class VIPTicket extends Ticket {
+        public VIPTicket(UUID ticketId, UUID eventId, UUID seatId,
                          UUID customerId, String code, OffsetDateTime purchaseTime) {
-        super(ticketId, eventId, seatId, customerId, code, purchaseTime);
+            super(ticketId, eventId, seatId, customerId, code, purchaseTime);
+        }
     }
-}
 
-
-public enum TicketType {
-    STANDARD,
-    VIP,
-    STUDENT
+    public static class StudentTicket extends Ticket {
+        public StudentTicket(UUID ticketId, UUID eventId, UUID seatId,
+                             UUID customerId, String code, OffsetDateTime purchaseTime) {
+            super(ticketId, eventId, seatId, customerId, code, purchaseTime);
+        }
+    }
 }
